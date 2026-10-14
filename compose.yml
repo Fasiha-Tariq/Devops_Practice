@@ -1,0 +1,26 @@
+
+services:
+  app:
+    image: python:3.11-slim
+    command: ["python", "-c", "import os,time; print('App running:', os.getenv('APP_MODE')); time.sleep(3600)"]
+    environment:
+      APP_MODE: practice
+    networks:
+      - exam-network
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    networks:
+      - exam-network
+
+networks:
+  exam-network:
+    driver: bridge
+
+volumes:
+  redis-data:
